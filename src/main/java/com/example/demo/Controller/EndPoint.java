@@ -84,32 +84,42 @@ public class EndPoint {
         }
     }
 
-    @PutMapping("/updateCitybyName/{cityName}")
-    public ResponseEntity<City> updateCitybyName(@PathVariable String cityName, @RequestBody City updatedCity){
+    @PutMapping("/updateCity")
+    public ResponseEntity<City> updateCitybyId(@RequestBody City updatedCity){
         try {
-            return new ResponseEntity<City>(cs.updateCitybyName(cityName, updatedCity), HttpStatus.OK);
+            return new ResponseEntity<City>(cs.updateCity(updatedCity), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<City>(HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
+
+    @PutMapping("/updateCitybyNCD/{cityName}")
+    public ResponseEntity<City> updateCitybyNCD(@PathVariable String cityName, @RequestParam String countrycode, @RequestParam String district, @RequestBody City updatedCity){
+        try {
+            return new ResponseEntity<City>(cs.updateCitybyNCD(cityName, countrycode, district, updatedCity), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<City>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
     @DeleteMapping("/deleteCitybyId")
-    public ResponseEntity<City> deleteCitybyId(@RequestParam Integer id){
+    public ResponseEntity<String> deleteCitybyId(@RequestParam Integer id){
         try {
-            return new ResponseEntity<City>(cs.deleteCitybyId(id), HttpStatus.OK);
+            return new ResponseEntity<String>(cs.deleteCitybyId(id), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<City>(HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<String>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
-    @DeleteMapping("/deleteCitybyName/{cityName}")
-    public ResponseEntity<List<City>> deleteCitybyName(@PathVariable String cityName){
+    @DeleteMapping("/deleteCitybyNCD/{cityName}")
+    public ResponseEntity<String> deleteCitybyName(@PathVariable String cityName, @RequestParam String countrycode, @RequestParam String district){
         try {
-            return new ResponseEntity<>(cs.deleteCitybyName(cityName), HttpStatus.OK);
+            return new ResponseEntity<>(cs.deleteCitybyNCD(cityName, countrycode, district), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-
-    
     }
+
+   
+
 }

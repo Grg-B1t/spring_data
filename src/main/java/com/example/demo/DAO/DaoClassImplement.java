@@ -25,7 +25,11 @@ public class DaoClassImplement implements DaoInterface {
     private static final String getCitybyDistrictQuery = "select * from city where district = ?";
     private static final String getCitybyCountryQuery = "select * from city where countrycode = ?";
     private static final String addCityQuery = "insert into city (id, name, countrycode, district, population) values (?, ?, ?, ?, ?)";
-    protected static final Connection connection = null;
+    private static final String updateCitybyIdQuery = "update city set name=?, countrycode=?, district=?, population=? where id=?";
+    private static final String updateCityQuery = "update city set name=?, countrycode=?, district=?, population=? where id=?";
+    private static final String updateCitybyNCDQuery = "update city set name=?, countrycode=?, district=?, population=? where name = ? and countrycode = ? and district = ?";
+    private static final String deleteCitybyIdQuery = "delete from city where id = ?";
+    private static final String deleteCitybyNCDQuery = "delete from city where name = ? and countrycode = ? and district = ?";
     private JdbcTemplate jt;
 
     @Autowired
@@ -36,7 +40,7 @@ public class DaoClassImplement implements DaoInterface {
     @Override
     public List<City> getCities() {
         List<City> cities = jt.query(getAllQuery, new CityMapper());
-        return cities;
+        return cities; 
     }
 
     @Override
@@ -55,33 +59,71 @@ public class DaoClassImplement implements DaoInterface {
     @Override
     public City addCity(City newCity) {
 
-        PreparedStatementCreator psc = new PreparedStatementCreator() {
+       Object[] objArray = new Object[]{newCity.getId(), 
+        newCity.getName(), 
+        newCity.getCountrycode(),
+        newCity.getDistrict(), 
+        newCity.getPopulation()};
 
-            @Override
-            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                try (PreparedStatement ps = con.prepareStatement(addCityQuery, Statement.RETURN_GENERATED_KEYS)) {
-                    ps.setLong(1, newCity.getId());
-                    ps.setString(2, newCity.getName());
-                    ps.setString(3, newCity.getCountrycode());
-                    ps.setString(4, newCity.getDistrict());
-                    ps.setInt(5, newCity.getPopulation());
-
-                    return ps;
-                }
-                catch(SQLException sqle){
-                    System.out.println(sqle.toString());
-                    return null;
-                }
-            }
-       
-        };
-
-        KeyHolder kh = new GeneratedKeyHolder();
-
-        jt.update(psc, kh);
-        newCity.setId(kh.getKey().longValue());
+        jt.update(addCityQuery, objArray);
 
         return newCity;
     }
+
+    @Override
+    public City updateCitybyId(Integer id, City updatedCity) {
+        Object[] objArray = new Object[]{ 
+            updatedCity.getName(), 
+            updatedCity.getCountrycode(),
+            updatedCity.getDistrict(), 
+            updatedCity.getPopulation(), id};
+
+            jt.update(updateCitybyIdQuery, objArray);
+        
+            return updatedCity;
+    }
+
+    @Override
+    public City updateCity(City updatedCity) {
+        
+        Object[] objArray = new Object[]{ 
+            updatedCity.getName(), 
+            updatedCity.getCountrycode(),
+            updatedCity.getDistrict(), 
+            updatedCity.getPopulation(), updatedCity.getId()};
+
+            jt.update(updateCityQuery, objArray);
+        
+            return updatedCity;
+    }
+
+    @Override
+    public City updateCitybyNCD(String name, String countrycode, String district, City updatedCity) {
+        Object[] objArray = new Object[]{ 
+            updatedCity.getName(), 
+            updatedCity.getCountrycode(),
+            updatedCity.getDistrict(), 
+            updatedCity.getPopulation(), name, countrycode, district};
+
+            jt.update(updateCitybyNCDQuery, objArray);
+        
+            return updatedCity;
+    }
+
+    @Override
+    public String deleteCitybyId(Integer id) {
+        jt.update(deleteCitybyIdQuery, id);
+        return "Your record is removed successfully.";
+    }
+
+    @Override
+    public String deleteCitybyNCD(String name, String countrycode, String district) {
+        Object[] objArray = new Object[]{ name, countrycode, district};
+        
+        jt.update(deleteCitybyNCDQuery, objArray);    
+        return "Your record is removed successfully.";
+    }
+
+    
     
 }

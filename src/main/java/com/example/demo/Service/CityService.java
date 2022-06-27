@@ -1,7 +1,10 @@
 package com.example.demo.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +21,7 @@ public class CityService implements CityServiceInterface {
     public List<City> getCity() {
         List<City> cityList = daoImp.getCities();
         List<City> newCityList = new ArrayList<>();
-        
+
         for (int i = 0; i < 100; i++) {
             newCityList.add(cityList.get(i));
 
@@ -40,7 +43,7 @@ public class CityService implements CityServiceInterface {
 
     @Override
     public List<City> getCitiesbyDistrict(String district) {
-        
+
         return daoImp.getCitybyDistrict(district);
     }
 
@@ -51,34 +54,37 @@ public class CityService implements CityServiceInterface {
 
     @Override
     public City createCity(City newCity) {
-        
+
         return daoImp.addCity(newCity);
     }
 
     @Override
-    public City updateCitybyId(Integer id, City newCity) {
-        // TODO Auto-generated method stub
-        return null;
+    public City updateCitybyId(Integer id, City updatedCity) {
+        return daoImp.updateCitybyId(id, updatedCity);
     }
 
     @Override
-    public City updateCitybyName(String name, City newCity) {
-        // TODO Auto-generated method stub
-        return null;
+    public City updateCity(City updatedCity) {
+        return daoImp.updateCity(updatedCity);
     }
 
     @Override
-    public City deleteCitybyId(Integer id) {
-        // TODO Auto-generated method stub
-        return null;
+    public City updateCitybyNCD(String name, String countrycode, String district, City updatedCity) {
+        return daoImp.updateCitybyNCD(name, countrycode, district, updatedCity);
     }
 
     @Override
-    public List<City> deleteCitybyName(String name) {
-        // TODO Auto-generated method stub
-        return null;
+    public String deleteCitybyId(Integer id) {
+        return daoImp.deleteCitybyId(id);
     }
 
-  
+    @Override
+    public String deleteCitybyNCD(String name, String countrycode, String district) {
+        return daoImp.deleteCitybyNCD(name, countrycode, district);
+    }
+
+
+
     
+
 }
