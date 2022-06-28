@@ -91,7 +91,7 @@ public class SortAndPaging implements SortAndPagingInterface {
         String name = "name";
         String countrycode = "countrycode";
         String district = "district";
-        String population = "population";
+        
         
         for (int i = start - 1; i < end; i++) {
             if(cityList.size() <= i){
@@ -130,4 +130,25 @@ public class SortAndPaging implements SortAndPagingInterface {
         }
         return sortedCities;
     }
+
+    @Override
+    public List<City> getSortedCitiesbyName(Integer offset, Integer pageSize) {
+        List<City> allCities = daoImp.getCities();
+        List<City> pagesCityList = new ArrayList<>();
+
+        Integer start = pageSize * (offset -1);
+        Integer end = pageSize * offset; 
+
+        for (int i = start; i < end; i++) {
+            if(allCities.size() <= i){
+                break;
+            }
+            else{
+                pagesCityList.add(allCities.get(i));
+            }
+        }
+    return pagesCityList.stream().sorted((c1, c2) -> c1.getName().compareTo(c2.getName())).collect(Collectors.toList());
+    }
+
+    
 }

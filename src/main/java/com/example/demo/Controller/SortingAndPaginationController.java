@@ -70,4 +70,15 @@ public class SortingAndPaginationController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/sortByNameWithPagination") //Offset, pageSize, sort by name
+    public ResponseEntity <List<City>> sortByNameWithPagination(@RequestParam(value = "offset", defaultValue = "1", required = false) Integer offset,
+    @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize){
+        try {
+            return new ResponseEntity<>(sp.getSortedCitiesbyName(offset, pageSize), HttpStatus.FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
 }

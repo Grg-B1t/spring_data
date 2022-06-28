@@ -11,4 +11,5 @@ public interface SortAndPagingInterface {
     List<City> sortCities();
     List<City> sortedCitiesInRange(Integer start, Integer end);
     List<City> sortedCitiesInRangewithVar(Integer start, Integer end, String var);
+    List<City> getSortedCitiesbyName(Integer offset, Integer pageSize);
 }
